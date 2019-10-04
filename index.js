@@ -5,8 +5,9 @@ const graphqlHTTP = require('express-graphql');
 // require('dotenv').config();
 
 const app = express();
-const mongoose = require('mongoose');
-const uri = process.env.IWGU_URI;
+const port = process.env.PORT || 5000;
+// const mongoose = require('mongoose');
+// const uri = process.env.IWGU_URI;
 
 // mongoose
 //     .connect(uri, {
@@ -27,6 +28,12 @@ const uri = process.env.IWGU_URI;
 //     graphiql: true
 // }));
 
-app.listen(3000, () => {
-    console.log('Listening on port 3000');
+app.use(express.json());
+app.use((err, req, res, nex) => { res.send(err.message) });
+app.get('/', (req, res) => {
+    res.json({ 'key': 'value' });
+})
+
+app.listen(port, () => {
+    console.log(`Server is running on port: ${port}`);
 }); 
