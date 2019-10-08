@@ -1,0 +1,22 @@
+{
+  "plannerID": "",
+  "userID": "",
+  "name": "",
+  "days": [
+    {
+      "day": "",
+      "date": "",
+      "places": [
+        {
+          "placeID": "",
+          "time": {
+            "start": "",
+            "end": ""
+          }
+        }
+      ],
+      "note": ""
+    }
+  ],
+  "share": false
+}

@@ -1,0 +1,23 @@
+{
+  "placeID": "",
+  "name": "",
+  "category": [],
+  "description": "",
+  "img": [],
+  "rate": "",
+  "date": {
+    "monday": true,
+    "tuesday": true,
+    "wednesday": true,
+    "thursday": true,
+    "friday": true,
+    "saturday": true,
+    "sunday": true
+  },
+  "time": {
+    "open": "",
+    "close": ""
+  },
+  "address": "",
+  "tel": ""
+}
