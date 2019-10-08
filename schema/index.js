@@ -67,7 +67,7 @@ const RootQuery = new GraphQLObjectType({
     fields: () => ({
         user: {
             type: UserType,
-            args: { id: { type: GraphQLID } },
+            args: { id: { type: new GraphQLNonNull(GraphQLID) } },
             resolve(parent, args) {
                 return User.findById(args.id);
             }
@@ -80,7 +80,7 @@ const RootQuery = new GraphQLObjectType({
         },
         planner: {
             type: PlannerType,
-            args: { id: { type: GraphQLID } },
+            args: { id: { type: new GraphQLNonNull(GraphQLID) } },
             resolve(parent, args) {
                 return Planner.findById(args.id);
             }
@@ -100,12 +100,13 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 if (args.id)
                     return Planner.find({ userID: args.id });
-                return Planner.find({ name: args.name })
+                if (args.name)
+                    return Planner.find({ name: args.name })
             }
         },
         place: {
             type: PlaceType,
-            args: { id: { type: GraphQLID } },
+            args: { id: { type: new GraphQLNonNull(GraphQLID) } },
             resolve(parent, args) {
                 return Place.findById(args.id)
             }
@@ -148,7 +149,6 @@ const Mutation = new GraphQLObjectType({
                 password: { type: GraphQLString },
                 favourite: { type: new GraphQLList(GraphQLString) },
                 planner: { type: new GraphQLList(GraphQLString) },
-                share: { type: new GraphQLList(GraphQLString) }
             },
             resolve(parent, args) {
                 let newDetail = {}
@@ -159,20 +159,20 @@ const Mutation = new GraphQLObjectType({
                 return User.findByIdAndUpdate(args.id, newDetail)
             }
         },
-        createPlanner: {
-            type: PlannerType,
-            args: {
-                userID: { type: new GraphQLNonNull(GraphQLID) },
-                name: { type: new GraphQLNonNull(GraphQLString) },
-            },
-            resolve(parent, args) {
-                let planner = new Planner({
-                    userID: args.userID,
-                    name: args.name,
-                })
-                return planner.save()
-            }
-        },
+        // createPlanner: {
+        //     type: PlannerType,
+        //     args: {
+        //         userID: { type: new GraphQLNonNull(GraphQLID) },
+        //         name: { type: new GraphQLNonNull(GraphQLString) },
+        //     },
+        //     resolve(parent, args) {
+        //         let planner = new Planner({
+        //             userID: args.userID,
+        //             name: args.name,
+        //         })
+        //         return planner.save()
+        //     }
+        // },
         updatePlanner: {
             type: PlannerType,
             args: {
@@ -197,33 +197,33 @@ const Mutation = new GraphQLObjectType({
                 return Planner.findByIdAndDelete(args.id)
             }
         },
-        addPlace: {
-            type: PlaceType,
-            args: {
-                name: { type: new GraphQLNonNull(GraphQLString) },
-                category: { type: new GraphQLList(GraphQLString) },
-                time: {
-                    type: new GraphQLInputObjectType({
-                        name: 'InputTime',
-                        fields: {
-                            open: { type: GraphQLTime },
-                            close: { type: GraphQLTime }
-                        }
-                    })
-                },
-            },
-            resolve(parent, args) {
-                let place = new Place({
-                    name: args.name,
-                    category: args.category,
-                    time: {
-                        open: args.time.open,
-                        close: args.time.close
-                    }
-                })
-                return place.save()
-            }
-        },
+        // addPlace: {
+        //     type: PlaceType,
+        //     args: {
+        //         name: { type: new GraphQLNonNull(GraphQLString) },
+        //         category: { type: new GraphQLList(GraphQLString) },
+        //         time: {
+        //             type: new GraphQLInputObjectType({
+        //                 name: 'InputTime',
+        //                 fields: {
+        //                     open: { type: GraphQLTime },
+        //                     close: { type: GraphQLTime }
+        //                 }
+        //             })
+        //         },
+        //     },
+        //     resolve(parent, args) {
+        //         let place = new Place({
+        //             name: args.name,
+        //             category: args.category,
+        //             time: {
+        //                 open: args.time.open,
+        //                 close: args.time.close
+        //             }
+        //         })
+        //         return place.save()
+        //     }
+        // },
     }
 });
 module.exports = new GraphQLSchema({
