@@ -1,13 +1,13 @@
 # IWGU-Backend
 
-## Programming Language , Framework, Library
+### Programming Language , Framework, Library
 
 - ExpressJS (server)
 - GraphQL (query api)
 - MongooseDB (database)
 - Heroku (deploy)
 
-### Model
+### Schema
 
 - user
 
@@ -140,3 +140,55 @@ place
 ```
 
 ### Mutation
+
+- Post register
+
+```
+mutation{
+    register(username:$username,password:$password){
+        user*
+    }
+}
+```
+
+- Update user data
+
+```
+mutation{
+    updateUser(id:$id, | password:$password | favourite:$fav-place | planner: $planner-id ){
+        user*
+    }
+}
+```
+
+- Post create planner
+
+```
+-
+```
+
+- Update planner
+
+```
+mutation{
+    updatePlanner(id:$id, | name:$name | days:$days-list | share:$share-bool){
+        planner*
+    }
+}
+```
+
+- Delete planner
+
+```
+mutation{
+    removePlanner(id:$id){
+        planner*
+    }
+}
+```
+
+- Post place
+
+```
+-
+```
