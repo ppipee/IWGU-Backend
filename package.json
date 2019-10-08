@@ -1,7 +1,7 @@
 {
-  "name": "IWGU-backend",
+  "name": "IWGU-Backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "author": "IWGU",
   "license": "MIT",
   "devDependencies": {
@@ -10,10 +10,11 @@
     "express-graphql": "^0.9.0",
     "graphql": "^14.5.8",
     "graphql-iso-date": "^3.6.1",
+    "lodash": "^4.17.15",
     "mongoose": "^5.7.3",
     "nodemon": "^1.19.3"
   },
   "scripts": {
-    "nodemon": "nodemon app.js"
+    "nodemon": "nodemon server.js"
   }
 }
