@@ -11,10 +11,7 @@ const {
     GraphQLInputObjectType,
     GraphQLBoolean,
 } = graphql;
-
-const _ = require('lodash');
 const models = require('../models')
-// const UserType = require('./user');
 const DayPlanType = require('./planner')
 const PlaceType = require('./place')
 const InputDayPlanner = require('./inputdayplanner')
@@ -58,7 +55,6 @@ const PlannerType = new GraphQLObjectType({
         author: {
             type: UserType,
             resolve(parent, args) {
-                // console.log(parent)
                 return User.findById(parent.userID)
             }
         },
@@ -91,8 +87,11 @@ const RootQuery = new GraphQLObjectType({
         },
         sharePlanner: {
             type: new GraphQLList(PlannerType),
+            args: { word: { type: GraphQLString } },
             resolve(parent, args) {
-                return Planner.find({ share: true })
+                if (!args)
+                    return Planner.find({ share: true })
+                return Planner.find({ name: args.word, share: true })
             }
         },
         userPlanner: {
@@ -105,7 +104,7 @@ const RootQuery = new GraphQLObjectType({
             }
         },
         place: {
-            type: new GraphQLList(PlaceType),
+            type: PlaceType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
                 return Place.findById(args.id)
@@ -113,7 +112,10 @@ const RootQuery = new GraphQLObjectType({
         },
         places: {
             type: new GraphQLList(PlaceType),
+            args: { word: { type: GraphQLString } },
             resolve(parent, args) {
+                if (args.word)
+                    return Place.find({ name: args.word })
                 return Place.find({});
             }
         }
@@ -224,11 +226,6 @@ const Mutation = new GraphQLObjectType({
         },
     }
 });
-// User.findById(args.userID).exec((err, product) => {
-//     author = product.username
-//     console.log(author)
-// })
-
 module.exports = new GraphQLSchema({
 
     query: RootQuery,

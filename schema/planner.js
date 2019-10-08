@@ -10,7 +10,6 @@ const {
 
 const models = require('../models/')
 const User = models.User;
-const UserType = require('./user')
 const PlaceType = require('./place')
 
 
@@ -43,24 +42,6 @@ const DayPlanType = new GraphQLObjectType({
         places: { type: new GraphQLList(PlacePlanType) },
         note: { type: GraphQLString }
     }
-})
-
-const PlannerType = new GraphQLObjectType({
-    name: 'Planner',
-    fields: () => ({
-        id: { type: GraphQLID },
-        userID: { type: GraphQLID },
-        name: { type: GraphQLString },
-        days: { type: new GraphQLList(DayPlanType) },
-        author: {
-            type: UserType,
-            resolve(parent, args) {
-                // console.log(parent)
-                return User.findById(parent.userID)
-            }
-        },
-        share: { type: GraphQLBoolean },
-    }),
 })
 
 module.exports = DayPlanType
