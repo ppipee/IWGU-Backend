@@ -14,7 +14,7 @@ const placeScema = new Schema({
     },
     img: [String],
     rate: Number,
-    date: {
+    days: {
         monday: Boolean,
         tuesday: Boolean,
         wednesday: Boolean,
@@ -24,8 +24,8 @@ const placeScema = new Schema({
         sunday: Boolean
     },
     time: {
-        open: String,
-        close: String
+        open: Date,
+        close: Date
     },
     address: String,
     tel: String

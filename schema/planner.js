@@ -1,5 +1,5 @@
 const graphql = require('graphql');
-const { GraphQLDate } = require('graphql-iso-date');
+const { GraphQLDate, GraphQLTime } = require('graphql-iso-date');
 const {
     GraphQLObjectType,
     GraphQLString,
@@ -9,7 +9,7 @@ const {
 } = graphql;
 
 const models = require('../models/')
-const User = models.User;
+const { Place, User } = models;
 const PlaceType = require('./place')
 
 
@@ -25,10 +25,10 @@ const PlacePlanType = new GraphQLObjectType({
         time: {
             type: new GraphQLObjectType({
                 name: 'TimeSE',
-                fields: () => ({
-                    start: { type: GraphQLString },
-                    end: { type: GraphQLString }
-                })
+                fields: {
+                    start: { type: GraphQLTime },
+                    end: { type: GraphQLTime }
+                }
             })
         }
     }

@@ -14,8 +14,7 @@ const userSchema = new Schema({
         trim: true,
     },
     favourite: [String],
-    planner: [String],
-    share: [String]
+    planner: [String]
 });
 
 const User = mongoose.model('User', userSchema);

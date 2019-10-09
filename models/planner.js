@@ -16,12 +16,12 @@ const plannerSchema = new Schema({
         {
             day: String,
             date: Date,
-            place: [
+            places: [
                 {
                     placeID: String,
                     time: {
-                        start: String,
-                        end: String
+                        start: Date,
+                        end: Date
                     }
                 }
             ],
