@@ -19,21 +19,20 @@ mongoose
         console.log('Connect to MongoDB')
     })
     .catch(err => console.log(err));
-
+mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error'))
 mongoose.connection.once('open', () => {
     console.log('conneted to database');
 });
-// app.use(express.json());
-app.use((err, req, res, nex) => { res.send(err.message) });
 app.use('/graphql', graphqlHTTP({
     schema,
     graphiql: true
 }));
 
-app.get('/', (req, res) => {
+app.use('/', (req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/html');
     res.end('<h1>IWGU Backend</h1>');
+    res.send("Welcome to IWGU Backend")
 })
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
