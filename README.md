@@ -67,6 +67,11 @@ place
 +---tel (string)
 ```
 
+### Format
+
+- Date year-month-day
+- Time 14:00:00+07:00
+
 ### Query
 
 - Get user
