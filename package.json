@@ -1,7 +1,7 @@
 {
   "name": "IWGU-Backend",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "index.js",
   "author": "IWGU",
   "license": "MIT",
   "devDependencies": {
@@ -15,7 +15,7 @@
     "nodemon": "^1.19.3"
   },
   "scripts": {
-    "start": "node server.js",
-    "nodemon": "nodemon server.js"
+    "start": "node index.js",
+    "nodemon": "nodemon index.js"
   }
 }
