@@ -18,7 +18,10 @@ const plannerSchema = new Schema({
             date: Date,
             places: [
                 {
-                    placeID: String,
+                    place: {
+                        placeID: String,
+                        categoryCode: String,
+                    },
                     time: {
                         start: Date,
                         end: Date

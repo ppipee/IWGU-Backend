@@ -11,12 +11,18 @@ const {
     GraphQLInputObjectType,
     GraphQLBoolean,
 } = graphql;
+const { GraphQLDate, GraphQLTime } = require('graphql-iso-date');
 const models = require('../models')
 const DayPlanType = require('./planner')
-const PlaceType = require('./place')
+const PlaceType = require('../TAT/place')
+const CardType = require('../TAT/card')
 const InputDayPlanner = require('./inputdayplanner')
-const { GraphQLDate, GraphQLTime } = require('graphql-iso-date');
-const { User, Planner, Place } = models;
+const { User, Planner } = models;
+const PlaceTAT = require('../TAT/query')
+const defaultOption = require('../TAT/defaultOptions')
+const link = require('../TAT/selectUrl')
+const fetch = require('node-fetch')
+
 
 const UserType = new GraphQLObjectType({
     name: 'User',
@@ -25,9 +31,21 @@ const UserType = new GraphQLObjectType({
         username: { type: GraphQLString },
         password: { type: GraphQLString },
         favourite: {
-            type: new GraphQLList(PlaceType),
-            resolve(parent, args) {
-                return parent.favourite.map(id => Place.findById(id))
+            type: new GraphQLList(CardType),
+            async resolve(parent, args) {
+                let fav = []
+                await Promise.all(Object.keys(parent.favourite).map(async (place) => {
+                    let url = link.details[parent.favourite[place].categoryCode] + parent.favourite[place].placeID
+                    let name = await fetch(url, {
+                        method: "GET",
+                        headers: defaultOption.headers
+                    }).then(res => res.json()).then(data => {
+                        console.log(data.result.place_name)
+                        return data.result.place_name
+                    }).catch(err => console.log("fav: ", err))
+                    fav.push({ name })
+                }))
+                return fav
             }
         },
         planner: {
@@ -67,9 +85,14 @@ const RootQuery = new GraphQLObjectType({
     fields: () => ({
         user: {
             type: UserType,
-            args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+            args: {
+                id: { type: GraphQLID }, username: { type: GraphQLString }
+            },
             resolve(parent, args) {
-                return User.findById(args.id);
+                if (args.id)
+                    return User.findById(args.id);
+                if (args.username)
+                    return User.findOne({ username: args.username });
             }
         },
         users: {
@@ -104,23 +127,7 @@ const RootQuery = new GraphQLObjectType({
                     return Planner.find({ name: args.name })
             }
         },
-        place: {
-            type: PlaceType,
-            args: { id: { type: new GraphQLNonNull(GraphQLID) } },
-            resolve(parent, args) {
-                return Place.findById(args.id)
-            }
-        },
-        places: {
-            type: new GraphQLList(PlaceType),
-            args: { word: { type: GraphQLString } },
-            resolve(parent, args) {
-                if (args.word)
-                    return Place.find({ name: args.word })
-                return Place.find({});
-            }
-        }
-
+        ...PlaceTAT.PlaceQuery
     })
 });
 
@@ -201,48 +208,7 @@ const Mutation = new GraphQLObjectType({
                 return Planner.findByIdAndDelete(args.id)
             }
         },
-        addPlace: {
-            type: PlaceType,
-            args: {
-                name: { type: new GraphQLNonNull(GraphQLString) },
-                category: { type: new GraphQLList(GraphQLString) },
-                description: { type: GraphQLString },
-                img: { type: new GraphQLList(GraphQLString) },
-                rate: { type: GraphQLInt },
-                days: {
-                    type: new GraphQLInputObjectType({
-                        name: 'InputDays',
-                        fields: {
-                            monday: { type: GraphQLBoolean },
-                            tuesday: { type: GraphQLBoolean },
-                            wednesday: { type: GraphQLBoolean },
-                            thursday: { type: GraphQLBoolean },
-                            friday: { type: GraphQLBoolean },
-                            saturday: { type: GraphQLBoolean },
-                            sunday: { type: GraphQLBoolean }
-                        }
-                    })
-                },
-                time: {
-                    type: new GraphQLInputObjectType({
-                        name: 'InputTime',
-                        fields: {
-                            open: { type: new GraphQLNonNull(GraphQLTime) },
-                            close: { type: new GraphQLNonNull(GraphQLTime) }
-                        }
-                    })
-                },
-                address: { type: GraphQLString },
-                tel: { type: GraphQLString }
-            },
-            resolve(parent, args) {
-                let { name, category, description, img, rate, days, time, address, tel } = args
-                let place = new Place({
-                    name, category, description, img, rate, days, time, address, tel
-                })
-                return place.save()
-            }
-        },
+        ...PlaceTAT.PlaceMutation
     }
 });
 module.exports = new GraphQLSchema({

@@ -33,8 +33,6 @@ app.use('/graphql', graphqlHTTP({
 
 app.use('/', (req, res) => {
     res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/html');
-    res.end('<h1>IWGU Backend</h1>');
     res.send("Welcome to IWGU Backend")
 })
 app.listen(port, () => {

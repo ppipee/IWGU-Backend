@@ -9,8 +9,12 @@ const {
 } = graphql;
 
 const models = require('../models/')
-const { Place, User } = models;
-const PlaceType = require('./place')
+const { User } = models;
+const PlaceType = require('../TAT/place')
+const defaultOption = require('../TAT/defaultOptions')
+const link = require('../TAT/selectUrl')
+const fetch = require('node-fetch')
+
 
 
 const PlacePlanType = new GraphQLObjectType({
@@ -19,7 +23,12 @@ const PlacePlanType = new GraphQLObjectType({
         place: {
             type: PlaceType,
             resolve(parent, args) {
-                return Place.findById(parent.placeID)
+                let url = link.details[parent.place.categoryCode.toLowerCase()] + parent.place.placeID
+                let name = fetch(url, {
+                    method: "GET",
+                    headers: defaultOption.headers
+                }).then(res => res.json()).then(data => data.result.place_name).catch(err => console.log("place plan: ", err))
+                return { name }
             }
         },
         time: {

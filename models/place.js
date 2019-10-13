@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const placeScema = new Schema({
+const placeSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -15,21 +15,31 @@ const placeScema = new Schema({
     img: [String],
     rate: Number,
     days: {
-        monday: Boolean,
-        tuesday: Boolean,
-        wednesday: Boolean,
-        thursday: Boolean,
-        friday: Boolean,
-        saturday: Boolean,
-        sunday: Boolean
+        day1: Boolean,
+        day2: Boolean,
+        day3: Boolean,
+        day4: Boolean,
+        day5: Boolean,
+        day6: Boolean,
+        day7: Boolean
     },
-    time: {
-        open: Date,
-        close: Date
+    time: String,
+    howToTravel: String,
+    service: {
+        payment: [String],
     },
-    address: String,
-    tel: String
+    location: {
+        address: String,
+        district: String,
+        postcode: String,
+        province: String,
+        sub_districe: String,
+    },
+    map: {
+        latitude: Number,
+        longitude: Number
+    }
 });
 
-const Place = mongoose.model('Place', placeScema);
+const Place = mongoose.model('Place', placeSchema);
 module.exports = Place;
