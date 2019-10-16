@@ -67,7 +67,7 @@ const ContactType = new GraphQLObjectType({
     name: 'Contact',
     fields: () => ({
         phone: { type: new GraphQLList(GraphQLString) },
-        mobiles: { type: GraphQLString },
+        mobiles: { type: new GraphQLList(GraphQLString) },
         emails: { type: new GraphQLList(GraphQLString) },
         urls: { type: new GraphQLList(GraphQLString) },
     })
