@@ -46,25 +46,42 @@ planner
 
 ```
 place
-+---id (id)
++---placeID (string)
 +---name (string)
 +---category (list)
 +---description (string)
 +---img (list)
 +---rate (int)
 +---days (json)
-|  +--monday (bool)
-|  +--tuesday (bool)
-|  +--wednesday (bool)
-|  +--thursday (bool)
-|  +--friday (bool)
-|  +--saturday (bool)
-|  +--sunday (bool)
-+---time (json)
-|  +--open (time)
-|  +--close (time)
-+---address (string)
-+---tel (string)
+|  +--day1 (bool)
+|  +--day2 (bool)
+|  +--day3 (bool)
+|  +--day4 (bool)
+|  +--day5 (bool)
+|  +--day6 (bool)
+|  +--day7 (bool)
++---time (string) (open-close)
++---howToTravel (string)
++---contact (json)
+|  +--phones (list)
+|  +--mobiles (list)
+|  +--emails (list)
+|  +--urls (list)
++---service (json)
+|  +--payment (list)
+|  +--facilities (json)
+|    +-code
+|    +-description
++---location (json)
+|  +--address
+|  +--district
+|  +--sub_districe
+|  +--province
+|  +--postcode
++---map (json)
+|  +--latitude (float)
+|  +--lontitude (float)
+
 ```
 
 ### Format
@@ -118,18 +135,8 @@ place
 
 ```
 {
-    userPlanner(id:$id|name:$name-planner){
+    userPlanner(id:$id|name:$string){
         planner*
-    }
-}
-```
-
-- Get place
-
-```
-{
-    place(id:$id){
-        ...
     }
 }
 ```
@@ -138,7 +145,31 @@ place
 
 ```
 {
-    places(null|word:$word-search){
+    places(category:$string|keyword:$string|provincename:$string|(geolocation:$string & searchradius:$int)|destination:$string){
+        placeID,
+        name,
+        time,
+        category,
+        location{
+            district,
+            province
+        },
+        map{
+            latitude,
+            longitude,
+        },
+        categoryCode,
+        thumbnail,
+        rate,
+    }
+}
+```
+
+- Get place detail
+
+```
+{
+    placeDetail(null|(placeID:$string & categoryCode:$string)){
         place*
     }
 }
@@ -150,7 +181,7 @@ place
 
 ```
 mutation{
-    register(username:$username,password:$password){
+    register(username:$string,password:$string){
         user*
     }
 }
@@ -160,7 +191,7 @@ mutation{
 
 ```
 mutation{
-    updateUser(id:$id, | password:$password | favourite:$fav-place | planner: $planner-id ){
+    updateUser(id:$id, | password:$password | favourite:[$id] | planner: [$id] ){
         user*
     }
 }
@@ -169,14 +200,19 @@ mutation{
 - Post create planner
 
 ```
--
+mutation{
+    createPlanner(userID:$id,name:$string,share:true ($bool),days:[$days]){
+        planner*
+    }
+}
+
 ```
 
 - Update planner
 
 ```
 mutation{
-    updatePlanner(id:$id, | name:$name | days:$days-list | share:$share-bool){
+    updatePlanner(id:$id, | name:$string | days:[$days] | share:$bool){
         planner*
     }
 }
@@ -195,5 +231,5 @@ mutation{
 - Post place
 
 ```
--
+    Comming Soon
 ```
