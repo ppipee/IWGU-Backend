@@ -63,11 +63,31 @@ const DaysType = new GraphQLObjectType({
 //     })
 // })
 
-const ServiceType = new GraphQLObjectType({
-    name: 'Service',
+const ContactType = new GraphQLObjectType({
+    name: 'Contact',
     fields: () => ({
-        payment: { type: new GraphQLList(GraphQLString) }
+        phone: { type: new GraphQLList(GraphQLString) },
+        mobiles: { type: GraphQLString },
+        emails: { type: new GraphQLList(GraphQLString) },
+        urls: { type: new GraphQLList(GraphQLString) },
     })
 })
 
-module.exports = { MapType, SubLocationType, LocationType, TimeType, DaysType, ServiceType }
+const FacilitiesType = new GraphQLObjectType({
+    name: 'Facilities',
+    fields: () => ({
+        code: { type: GraphQLString },
+        description: { type: GraphQLString },
+    })
+})
+
+const ServiceType = new GraphQLObjectType({
+    name: 'Service',
+    fields: () => ({
+        payment: { type: new GraphQLList(GraphQLString) },
+        facilities: { type: new GraphQLList(FacilitiesType) },
+
+    })
+})
+
+module.exports = { MapType, SubLocationType, LocationType, TimeType, DaysType, ServiceType, ContactType }

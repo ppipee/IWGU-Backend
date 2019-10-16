@@ -121,12 +121,14 @@ const PlaceQuery = {
                     howToTravel: data.how_to_travel,
                     service: {
                         payment,
+                        facilities: data.facilities,
                     },
                     location: data.location,
                     map: {
                         latitude: data.latitude,
                         longitude: data.longitude
-                    }
+                    },
+                    contact: data.contact,
                 })
             }).catch(err => console.log("place detail: ", err))
         }

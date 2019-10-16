@@ -22,6 +22,7 @@ const PlaceType = new GraphQLObjectType({
         service: { type: other.ServiceType },
         location: { type: other.LocationType },
         map: { type: other.MapType },
+        contact: { type: other.ContactType },
     })
 });
 
