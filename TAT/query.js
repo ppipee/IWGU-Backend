@@ -74,7 +74,7 @@ const PlaceQuery = {
                         rate: 5
                     })
                 })).catch(err => console.log(err))
-                // console.log(new_data)
+                console.log(new_data)
                 return new_data
             })
         }
@@ -89,26 +89,31 @@ const PlaceQuery = {
                 headers: defaultOption.headers
             }).then(res => res.json()).then(data => {
                 data = data.result
-                let open_hour = data.opening_hours.weekday_text
                 let days = {}
-                Object.keys(open_hour).map(day => {
-                    if (open_hour[day])
-                        days[day] = true
-                    days[day] = false
-                })
                 let time = null
-                Object.keys(open_hour).forEach(day => {
-                    if (open_hour[day])
-                        time = open_hour[day].time
-                })
+                if (data.opening_hours) {
+                    let open_hour = data.opening_hours.weekday_text
+                    Object.keys(open_hour).map(day => {
+                        if (open_hour[day])
+                            days[day] = true
+                        days[day] = false
+                    })
+                    Object.keys(open_hour).forEach(day => {
+                        if (open_hour[day])
+                            time = open_hour[day].time
+                    })
+                }
                 let category = []
-                data.place_information[`${args.categoryCode.toLowerCase()}_types`].forEach(tag => {
-                    category.push(tag)
-                })
+                if (data.place_information[`${args.categoryCode.toLowerCase()}_types`])
+                    data.place_information[`${args.categoryCode.toLowerCase()}_types`].forEach(tag => {
+                        category.push(tag)
+                    })
                 let payment = []
-                data.payment_methods.forEach(method => {
-                    payment.push(method.description)
-                })
+                if (data.payment_methods)
+                    data.payment_methods.forEach(method => {
+                        payment.push(method.description)
+                    })
+                console.log(data.facilities)
                 return ({
                     placeID: data.place_id,
                     name: data.place_name,

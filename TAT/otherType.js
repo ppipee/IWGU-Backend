@@ -34,13 +34,13 @@ const MapType = new GraphQLObjectType({
     })
 })
 
-const TimeType = new GraphQLObjectType({
-    name: 'TimeOC',
-    fields: () => ({
-        open: { type: GraphQLString },
-        close: { type: GraphQLString }
-    })
-})
+// const TimeType = new GraphQLObjectType({
+//     name: 'TimeOC',
+//     fields: () => ({
+//         open: { type: GraphQLString },
+//         close: { type: GraphQLString }
+//     })
+// })
 
 const DaysType = new GraphQLObjectType({
     name: 'Day',
@@ -86,8 +86,7 @@ const ServiceType = new GraphQLObjectType({
     fields: () => ({
         payment: { type: new GraphQLList(GraphQLString) },
         facilities: { type: new GraphQLList(FacilitiesType) },
-
     })
 })
 
-module.exports = { MapType, SubLocationType, LocationType, TimeType, DaysType, ServiceType, ContactType }
+module.exports = { MapType, SubLocationType, LocationType, DaysType, ServiceType, ContactType }

@@ -17,7 +17,7 @@ const PlaceType = new GraphQLObjectType({
         img: { type: new GraphQLList(GraphQLString) },
         rate: { type: GraphQLInt },
         days: { type: other.DaysType },
-        time: { type: other.TimeType },
+        time: { type: GraphQLString },
         howToTravel: { type: GraphQLString },
         service: { type: other.ServiceType },
         location: { type: other.LocationType },
