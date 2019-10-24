@@ -4,7 +4,8 @@ const {
     GraphQLID,
     GraphQLNonNull,
     GraphQLInputObjectType,
-    GraphQLList
+    GraphQLList,
+    GraphQLInt,
 } = graphql;
 const { GraphQLDate, GraphQLTime } = require('graphql-iso-date');
 
@@ -27,7 +28,7 @@ const InputPlacePlanner = new GraphQLInputObjectType({
 const InputDayPlanner = new GraphQLInputObjectType({
     name: 'InputDayDetail',
     fields: {
-        day: { type: new GraphQLNonNull(GraphQLString) },
+        day: { type: new GraphQLNonNull(GraphQLInt) },
         date: { type: GraphQLDate },
         note: { type: GraphQLString },
         places: { type: new GraphQLList(InputPlacePlanner) }
