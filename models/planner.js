@@ -14,7 +14,7 @@ const plannerSchema = new Schema({
     },
     days: [
         {
-            day: Number,
+            day: String,
             date: Date,
             places: [
                 {
