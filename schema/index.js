@@ -35,15 +35,27 @@ const UserType = new GraphQLObjectType({
             async resolve(parent, args) {
                 let fav = []
                 await Promise.all(Object.keys(parent.favourite).map(async (place) => {
+                    let code = parent.favourite[place].categoryCode
                     let url = link.details[parent.favourite[place].categoryCode] + parent.favourite[place].placeID
-                    let name = await fetch(url, {
+                    let data = await fetch(url, {
                         method: "GET",
                         headers: defaultOption.headers
                     }).then(res => res.json()).then(data => {
-                        console.log(data.result.place_name)
-                        return data.result.place_name
+                        const place = data.result
+                        return {
+                            placeID: place.place_id,
+                            name: place.place_name,
+                            category: place.category_description,
+                            location: {
+                                district: place.location.district,
+                                province: place.location.province,
+                            },
+                            categoryCode: code,
+                            thumbnail: place.thumbnail_url,
+                            rate: 5
+                        }
                     }).catch(err => console.log("fav: ", err))
-                    fav.push({ name })
+                    fav.push(data)
                 }))
                 return fav
             }
@@ -62,6 +74,14 @@ const UserType = new GraphQLObjectType({
         }
     })
 });
+
+const InputFavType = new GraphQLInputObjectType({
+    name: 'InputFav',
+    fields: () => ({
+        placeID: { type: new GraphQLNonNull(GraphQLString) },
+        categoryCode: { type: new GraphQLNonNull(GraphQLString) },
+    })
+})
 
 const PlannerType = new GraphQLObjectType({
     name: 'Planner',
@@ -154,7 +174,7 @@ const Mutation = new GraphQLObjectType({
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID) },
                 password: { type: GraphQLString },
-                favourite: { type: new GraphQLList(GraphQLString) },
+                favourite: { type: new GraphQLList(InputFavType) },
                 planner: { type: new GraphQLList(GraphQLString) },
             },
             resolve(parent, args) {
