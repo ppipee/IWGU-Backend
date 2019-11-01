@@ -30,6 +30,8 @@ const UserType = new GraphQLObjectType({
         id: { type: GraphQLID },
         username: { type: GraphQLID },
         password: { type: GraphQLString },
+        name: { type: GraphQLString },
+        status: { type: GraphQLString },
         favourite: {
             type: new GraphQLList(CardType),
             async resolve(parent, args) {
@@ -167,6 +169,8 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 if (args.id)
                     return Planner.find({ userID: args.id });
+                if (args.name)
+                    return Planner.find({ name: args.name });
             }
         },
         authPlanner: {
@@ -181,6 +185,41 @@ const RootQuery = new GraphQLObjectType({
                     }
                     return data.share ? "access" : "notaccess"
                 }).catch(err => "error")
+            }
+        },
+        checkCreatePlanner: {
+            type: GraphQLBoolean,
+            args: {
+                userID: { type: new GraphQLNonNull(GraphQLID) },
+            },
+            resolve(parent, args) {
+                return Planner.collection.find({ userID: args.userID }).then(async data => {
+                    if (data === null) {
+                        return false
+                    }
+                    const user = await User.collection.findOne(mongoose.Types.ObjectId(args.userID))
+                    if (user.status === "traveler")
+                        return data.length >= 5 ? false : true
+                    return true
+                }).catch(err => false)
+            }
+        },
+        checkCreateDay: {
+            type: GraphQLBoolean,
+            args: {
+                plannerID: { type: new GraphQLNonNull(GraphQLID) },
+                userID: { type: new GraphQLNonNull(GraphQLID) },
+            },
+            resolve(parent, args) {
+                return Planner.collection.findOne(mongoose.Types.ObjectId(args.plannerID)).then(async data => {
+                    if (data === null) {
+                        return false
+                    }
+                    const user = await User.collection.findOne(mongoose.Types.ObjectId(args.userID))
+                    if (user.status === "traveler")
+                        return data.days.length >= 7 ? false : true
+                    return true
+                }).catch(err => false)
             }
         },
         ...PlaceTAT.PlaceQuery
@@ -200,7 +239,9 @@ const Mutation = new GraphQLObjectType({
             resolve(parent, args) {
                 let user = new User({
                     username: args.username,
-                    password: args.password
+                    password: args.password,
+                    name: args.username,
+                    status: "traveler",
                 });
                 return user.save();
             }
@@ -210,6 +251,8 @@ const Mutation = new GraphQLObjectType({
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID) },
                 password: { type: GraphQLString },
+                name: { type: GraphQLString },
+                status: { type: GraphQLString },
                 favourite: { type: new GraphQLList(InputFavType) },
                 planner: { type: new GraphQLList(GraphQLString) },
             },
@@ -243,15 +286,15 @@ const Mutation = new GraphQLObjectType({
         updatePlanner: {
             type: PlannerType,
             args: {
-                id: { type: GraphQLID },
+                id: { type: new GraphQLNonNull(GraphQLID) },
                 name: { type: GraphQLString },
                 share: { type: GraphQLBoolean },
-                days: { type: InputDayPlanner }
+                days: { type: new GraphQLList(InputDayPlanner) }
             },
             resolve(parent, args) {
                 let newPlanner = {}
                 Object.keys(args).map(fstLayer => {
-                    if (args[fstLayer] !== args.id && args[fstLayer] !== args.days)
+                    if (args[fstLayer] !== args.id)
                         newPlanner[fstLayer] = args[fstLayer]
                 })
                 return Planner.findByIdAndUpdate(args.id, newPlanner)

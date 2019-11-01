@@ -12,6 +12,11 @@ const userSchema = new Schema({
         required: true,
         minlength: 5,
     },
+    name: {
+        type: String,
+        minlength: 1,
+    },
+    status: String,
     favourite: [{
         placeID: String,
         categoryCode: String,
