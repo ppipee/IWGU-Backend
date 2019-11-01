@@ -133,7 +133,7 @@ const PlaceQuery = {
                         latitude: data.latitude,
                         longitude: data.longitude
                     },
-                    contact: data.contact,
+                    contact: { ...data.contact, facebook: null, instragram: null },
                 })
             }).catch(err => console.log("place detail: ", err))
         }

@@ -22,13 +22,13 @@ const PlaceTAT = require('../TAT/query')
 const defaultOption = require('../TAT/defaultOptions')
 const link = require('../TAT/selectUrl')
 const fetch = require('node-fetch')
-
+const mongoose = require('mongoose')
 
 const UserType = new GraphQLObjectType({
     name: 'User',
     fields: () => ({
         id: { type: GraphQLID },
-        username: { type: GraphQLString },
+        username: { type: GraphQLID },
         password: { type: GraphQLString },
         favourite: {
             type: new GraphQLList(CardType),
@@ -121,6 +121,30 @@ const RootQuery = new GraphQLObjectType({
                 return User.find({});
             }
         },
+        userSignin: {
+            type: GraphQLBoolean,
+            args: {
+                username: { type: new GraphQLNonNull(GraphQLID) }, password: { type: new GraphQLNonNull(GraphQLString) }
+            },
+            resolve(parent, args) {
+                return User.collection.findOne({ username: args.username }).then(data => {
+                    if (data === null)
+                        return false
+                    return data.password === args.password
+                }).catch(err => false)
+            }
+        },
+        userRegister: {
+            type: GraphQLBoolean,
+            args: {
+                username: { type: new GraphQLNonNull(GraphQLID) }
+            },
+            resolve(parent, args) {
+                return User.collection.findOne({ username: args.username }).then(data => {
+                    data === null ? false : true
+                }).catch(err => false)
+            }
+        },
         planner: {
             type: PlannerType,
             args: { id: { type: new GraphQLNonNull(GraphQLID) } },
@@ -143,8 +167,20 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 if (args.id)
                     return Planner.find({ userID: args.id });
-                if (args.name)
-                    return Planner.find({ name: args.name })
+            }
+        },
+        authPlanner: {
+            type: GraphQLString,
+            args: {
+                plannerID: { type: new GraphQLNonNull(GraphQLID) },
+            },
+            resolve(parent, args) {
+                return Planner.collection.findOne(mongoose.Types.ObjectId(args.plannerID)).then(data => {
+                    if (data === null) {
+                        return "notfound"
+                    }
+                    return data.share ? "access" : "notaccess"
+                }).catch(err => "error")
             }
         },
         ...PlaceTAT.PlaceQuery

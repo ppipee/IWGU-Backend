@@ -70,6 +70,8 @@ const ContactType = new GraphQLObjectType({
         mobiles: { type: new GraphQLList(GraphQLString) },
         emails: { type: new GraphQLList(GraphQLString) },
         urls: { type: new GraphQLList(GraphQLString) },
+        facebook: { type: GraphQLString },
+        instagram: { type: GraphQLString },
     })
 })
 
