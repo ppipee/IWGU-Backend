@@ -121,7 +121,7 @@ const RootQuery = new GraphQLObjectType({
                 return User.find({});
             }
         },
-        userSignin: {
+        authSignin: {
             type: GraphQLBoolean,
             args: {
                 username: { type: new GraphQLNonNull(GraphQLID) }, password: { type: new GraphQLNonNull(GraphQLString) }
@@ -134,7 +134,7 @@ const RootQuery = new GraphQLObjectType({
                 }).catch(err => false)
             }
         },
-        userRegister: {
+        authRegister: {
             type: GraphQLBoolean,
             args: {
                 username: { type: new GraphQLNonNull(GraphQLID) }
