@@ -197,7 +197,8 @@ const RootQuery = new GraphQLObjectType({
                     if (data === null) {
                         return false
                     }
-                    const user = await User.collection.findOne(mongoose.Types.ObjectId(args.userID))
+                    const id = args.userID
+                    const user = await User.collection.findOne(mongoose.Types.ObjectId(id))
                     if (user.status === "traveler")
                         return data.length >= 5 ? false : true
                     return true

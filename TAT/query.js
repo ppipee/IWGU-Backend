@@ -104,20 +104,20 @@ const PlaceQuery = {
                     })
                 }
                 let category = []
-                if (data.place_information[`${args.categoryCode.toLowerCase()}_types`])
+                if (data.place_information[`${args.categoryCode.toLowerCase()}_types`]) {
                     data.place_information[`${args.categoryCode.toLowerCase()}_types`].forEach(tag => {
-                        category.push(tag)
+                        category = [...category, tag.description]
                     })
+                }
                 let payment = []
                 if (data.payment_methods)
                     data.payment_methods.forEach(method => {
                         payment.push(method.description)
                     })
-                console.log(data.facilities)
                 return ({
                     placeID: data.place_id,
                     name: data.place_name,
-                    category,
+                    category: category,
                     categoryCode: args.categoryCode,
                     description: data.place_information.detail,
                     img: data.mobile_picture_urls,
