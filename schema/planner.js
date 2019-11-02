@@ -15,8 +15,6 @@ const defaultOption = require('../TAT/defaultOptions')
 const link = require('../TAT/selectUrl')
 const fetch = require('node-fetch')
 
-
-
 const PlacePlanType = new GraphQLObjectType({
     name: 'PlacePlan',
     fields: {
