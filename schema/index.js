@@ -129,7 +129,7 @@ const RootQuery = new GraphQLObjectType({
                 username: { type: new GraphQLNonNull(GraphQLID) }, password: { type: new GraphQLNonNull(GraphQLString) }
             },
             resolve(parent, args) {
-                return User.collection.findOne({ username: args.username }).then(data => {
+                return User.findOne({ username: args.username }).then(data => {
                     if (data === null)
                         return false
                     return data.password === args.password
@@ -142,7 +142,7 @@ const RootQuery = new GraphQLObjectType({
                 username: { type: new GraphQLNonNull(GraphQLID) }
             },
             resolve(parent, args) {
-                return User.collection.findOne({ username: args.username }).then(data => {
+                return User.findOne({ username: args.username }).then(data => {
                     data === null ? false : true
                 }).catch(err => false)
             }
