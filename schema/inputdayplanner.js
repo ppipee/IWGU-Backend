@@ -17,10 +17,18 @@ const InputTimePlanner = new GraphQLInputObjectType({
     }
 })
 
-const InputPlacePlanner = new GraphQLInputObjectType({
+const InputPlace = new GraphQLInputObjectType({
     name: 'InputPlace',
     fields: {
-        placeID: { type: new GraphQLNonNull(GraphQLID) },
+        placeID: { type: new GraphQLNonNull(GraphQLString) },
+        categoryCode: { type: new GraphQLNonNull(GraphQLString) },
+    }
+})
+
+const InputPlacesPlanner = new GraphQLInputObjectType({
+    name: 'InputPlaces',
+    fields: {
+        place: { type: InputPlace },
         time: { type: InputTimePlanner }
     }
 })
@@ -31,7 +39,7 @@ const InputDayPlanner = new GraphQLInputObjectType({
         day: { type: new GraphQLNonNull(GraphQLInt) },
         date: { type: GraphQLDate },
         note: { type: GraphQLString },
-        places: { type: new GraphQLList(InputPlacePlanner) }
+        places: { type: new GraphQLList(InputPlacesPlanner) }
     }
 })
 

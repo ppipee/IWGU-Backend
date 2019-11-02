@@ -4,7 +4,6 @@ const plannerSchema = new Schema({
     userID: {
         type: String,
         required: true,
-        unique: true,
     },
     name: String,
     days: [
