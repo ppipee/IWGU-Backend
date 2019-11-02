@@ -118,6 +118,7 @@ const PlaceQuery = {
                     placeID: data.place_id,
                     name: data.place_name,
                     category,
+                    categoryCode: args.categoryCode,
                     description: data.place_information.detail,
                     img: data.mobile_picture_urls,
                     rate: 5,

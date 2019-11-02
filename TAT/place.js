@@ -13,6 +13,7 @@ const PlaceType = new GraphQLObjectType({
         placeID: { type: GraphQLString },
         name: { type: GraphQLString },
         category: { type: new GraphQLList(GraphQLString) },
+        categoryCode: { type: GraphQLString },
         description: { type: GraphQLString },
         img: { type: new GraphQLList(GraphQLString) },
         rate: { type: GraphQLInt },
