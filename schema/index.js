@@ -179,7 +179,7 @@ const RootQuery = new GraphQLObjectType({
                 plannerID: { type: new GraphQLNonNull(GraphQLID) },
             },
             resolve(parent, args) {
-                return Planner.collection.findOne(mongoose.Types.ObjectId(args.plannerID)).then(data => {
+                return Planner.findOne(mongoose.Types.ObjectId(args.plannerID)).then(data => {
                     if (data === null) {
                         return "notfound"
                     }
