@@ -193,12 +193,12 @@ const RootQuery = new GraphQLObjectType({
                 userID: { type: new GraphQLNonNull(GraphQLID) },
             },
             resolve(parent, args) {
-                return Planner.collection.find({ userID: args.userID }).then(async data => {
+                return Planner.find({ userID: args.userID }).then(async data => {
                     if (data === null) {
                         return false
                     }
                     const id = args.userID
-                    const user = await User.collection.findOne(mongoose.Types.ObjectId(id))
+                    const user = await User.findOne(mongoose.Types.ObjectId(id))
                     if (user.status === "traveler")
                         return data.length >= 5 ? false : true
                     return true
@@ -212,11 +212,11 @@ const RootQuery = new GraphQLObjectType({
                 userID: { type: new GraphQLNonNull(GraphQLID) },
             },
             resolve(parent, args) {
-                return Planner.collection.findOne(mongoose.Types.ObjectId(args.plannerID)).then(async data => {
+                return Planner.findOne(mongoose.Types.ObjectId(args.plannerID)).then(async data => {
                     if (data === null) {
                         return false
                     }
-                    const user = await User.collection.findOne(mongoose.Types.ObjectId(args.userID))
+                    const user = await User.findOne(mongoose.Types.ObjectId(args.userID))
                     if (user.status === "traveler")
                         return data.days.length >= 7 ? false : true
                     return true
