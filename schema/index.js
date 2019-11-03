@@ -143,7 +143,7 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve(parent, args) {
                 return User.findOne({ username: args.username }).then(data => {
-                    data === null ? false : true
+                    return data === null ? true : false
                 }).catch(err => false)
             }
         },
