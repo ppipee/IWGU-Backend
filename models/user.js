@@ -21,6 +21,10 @@ const userSchema = new Schema({
         placeID: String,
         categoryCode: String,
     }],
+    draft: [{
+        placeID: String,
+        categoryCode: String,
+    }],
     planner: [String]
 });
 

@@ -47,7 +47,7 @@ const UserType = new GraphQLObjectType({
                         return {
                             placeID: place.place_id,
                             name: place.place_name,
-                            category: place.category_description,
+                            // category: place.category_description,
                             location: {
                                 district: place.location.district,
                                 province: place.location.province,
@@ -57,6 +57,29 @@ const UserType = new GraphQLObjectType({
                             rate: 5
                         }
                     }).catch(err => console.log("fav: ", err))
+                    fav.push(data)
+                }))
+                return fav
+            }
+        },
+        draft: {
+            type: new GraphQLList(CardType),
+            async resolve(parent, args) {
+                let fav = []
+                await Promise.all(Object.keys(parent.draft).map(async (place) => {
+                    let code = parent.draft[place].categoryCode
+                    let url = link.details[parent.draft[place].categoryCode] + parent.draft[place].placeID
+                    let data = await fetch(url, {
+                        method: "GET",
+                        headers: defaultOption.headers
+                    }).then(res => res.json()).then(data => {
+                        const place = data.result
+                        return {
+                            placeID: place.place_id,
+                            name: place.place_name,
+                            categoryCode: code,
+                        }
+                    }).catch(err => console.log("draft: ", err))
                     fav.push(data)
                 }))
                 return fav
@@ -243,6 +266,7 @@ const Mutation = new GraphQLObjectType({
                     name: args.username,
                     status: "traveler",
                 });
+                console.log(user)
                 return user.save();
             }
         },
@@ -254,6 +278,7 @@ const Mutation = new GraphQLObjectType({
                 name: { type: GraphQLString },
                 status: { type: GraphQLString },
                 favourite: { type: new GraphQLList(InputFavType) },
+                draft: { type: new GraphQLList(InputFavType) },
                 planner: { type: new GraphQLList(GraphQLString) },
             },
             resolve(parent, args) {
