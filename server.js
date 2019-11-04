@@ -8,6 +8,7 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 const uri = process.env.IWGU_URI;
+const distance = require('./DistanceMatrix/DistanceMatrix')
 
 app.use(cors())
 
@@ -26,6 +27,7 @@ mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection 
 mongoose.connection.once('open', () => {
     console.log('conneted to database');
 });
+
 app.use('/graphql', graphqlHTTP({
     schema,
     graphiql: true
@@ -37,4 +39,4 @@ app.use('/', (req, res) => {
 })
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
-}); 
+});

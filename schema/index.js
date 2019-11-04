@@ -11,6 +11,7 @@ const {
     GraphQLInputObjectType,
     GraphQLBoolean,
 } = graphql;
+const fetch = require('node-fetch')
 const { GraphQLDate, GraphQLTime } = require('graphql-iso-date');
 const models = require('../models')
 const DayPlanType = require('./planner')
@@ -21,8 +22,7 @@ const { User, Planner } = models;
 const PlaceTAT = require('../TAT/query')
 const defaultOption = require('../TAT/defaultOptions')
 const link = require('../TAT/selectUrl')
-const fetch = require('node-fetch')
-const mongoose = require('mongoose')
+const DistanceQuery = require('../DistanceMatrix/query')
 
 const UserType = new GraphQLObjectType({
     name: 'User',
@@ -245,7 +245,8 @@ const RootQuery = new GraphQLObjectType({
                 }).catch(err => false)
             }
         },
-        ...PlaceTAT.PlaceQuery
+        ...PlaceTAT.PlaceQuery,
+        ...DistanceQuery,
     })
 });
 
