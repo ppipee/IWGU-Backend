@@ -131,7 +131,7 @@ const RootQuery = new GraphQLObjectType({
         user: {
             type: UserType,
             args: {
-                id: { type: GraphQLID }, username: { type: GraphQLString }
+                id: { type: GraphQLID }, username: { type: GraphQLID }
             },
             resolve(parent, args) {
                 if (args.id)
