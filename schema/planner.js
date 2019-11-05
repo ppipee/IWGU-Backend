@@ -5,6 +5,7 @@ const {
     GraphQLString,
     GraphQLID,
     GraphQLList,
+    GraphQLInt,
     GraphQLBoolean
 } = graphql;
 
@@ -44,7 +45,7 @@ const PlacePlanType = new GraphQLObjectType({
 const DayPlanType = new GraphQLObjectType({
     name: 'DayPlan',
     fields: {
-        day: { type: GraphQLString },
+        day: { type: GraphQLInt },
         date: { type: GraphQLDate },
         places: { type: new GraphQLList(PlacePlanType) },
         note: { type: GraphQLString }
