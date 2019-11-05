@@ -30,7 +30,7 @@ const PlaceQuery = {
         resolve(parent, args) {
             let url = new URL(link.place)
             let params = args
-            params.numberofresult = 10
+            params.numberofresult = 50
             Object.keys(params).forEach(key => {
                 if (params[key])
                     url.searchParams.append(key, params[key])
