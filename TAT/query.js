@@ -26,11 +26,12 @@ const PlaceQuery = {
             provincename: { type: GraphQLString },
             searchradius: { type: GraphQLInt },
             destination: { type: GraphQLString },
+            no: { type: GraphQLInt },
         },
         resolve(parent, args) {
             let url = new URL(link.place)
             let params = args
-            params.numberofresult = 100
+            params.numberofresult = args.no === undefined ? 80 : args.no
             Object.keys(params).forEach(key => {
                 if (params[key])
                     url.searchParams.append(key, params[key])
