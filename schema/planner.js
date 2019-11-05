@@ -27,7 +27,8 @@ const PlacePlanType = new GraphQLObjectType({
                     method: "GET",
                     headers: defaultOption.headers
                 }).then(res => res.json()).then(data => data.result.place_name).catch(err => console.log("place plan: ", err))
-                return { name }
+                console.log(parent.place)
+                return { name, categoryCode: parent.place.categoryCode.toLowerCase(), placeID: parent.place.placeID }
             }
         },
         time: {

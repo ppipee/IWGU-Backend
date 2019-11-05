@@ -22,6 +22,7 @@ const InputPlace = new GraphQLInputObjectType({
     fields: {
         placeID: { type: new GraphQLNonNull(GraphQLString) },
         categoryCode: { type: new GraphQLNonNull(GraphQLString) },
+        name: { type: new GraphQLNonNull(GraphQLString) },
     }
 })
 
