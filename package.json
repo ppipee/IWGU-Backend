@@ -16,7 +16,7 @@
     "google-distance-matrix": "^1.1.1",
     "graphql": "^14.5.8",
     "graphql-iso-date": "^3.6.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mongoose": "^5.7.5",
     "node-fetch": "^2.6.0",
     "nodemon": "^1.19.3"
